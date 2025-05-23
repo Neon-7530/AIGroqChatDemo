@@ -2,14 +2,48 @@ using System.Collections;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
+using TMPro;
 
 public class GroqChatClient : MonoBehaviour
 {
     public string apiKey = "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";
+    
+    [SerializeField] private TMP_InputField inputField;    // 入力フィールド
+    [SerializeField] private Button sendButton;           // 送信ボタン
+    [SerializeField] private TextMeshProUGUI outputText;  // 出力テキスト
 
-    void Start()
+    private void Start()
     {
-        StartCoroutine(CallGroqAPI("こんにちは！"));
+        // ボタンのクリックイベントを設定
+        sendButton.onClick.AddListener(OnSendButtonClicked);
+        
+        // 入力フィールドのEnterキーイベントを設定
+        inputField.onSubmit.AddListener(_ => OnSendButtonClicked());
+    }
+
+    private void OnSendButtonClicked()
+    {
+        string message = inputField.text.Trim();
+        if (string.IsNullOrEmpty(message)) return;
+
+        // 入力フィールドをクリア
+        inputField.text = "";
+        
+        // 送信ボタンを無効化
+        sendButton.interactable = false;
+        
+        // ユーザーのメッセージを表示
+        AppendMessage("あなた", message);
+        
+        // APIを呼び出し
+        StartCoroutine(CallGroqAPI(message));
+    }
+
+    private void AppendMessage(string sender, string message)
+    {
+        // メッセージを追加
+        outputText.text += $"{sender}: {message}\n\n";
     }
 
     IEnumerator CallGroqAPI(string userMessage)
@@ -49,53 +83,24 @@ public class GroqChatClient : MonoBehaviour
                 if (response != null && response.choices != null && response.choices.Length > 0)
                 {
                     string reply = response.choices[0].message.content;
-                    Debug.Log("AIの返答: " + reply);
+                    AppendMessage("AI", reply);
+                    Debug.Log("AIの応答: " + reply);
                 }
                 else
                 {
                     Debug.LogWarning("レスポンスのパースに失敗しました: " + request.downloadHandler.text);
+                    AppendMessage("システム", "エラー: レスポンスのパースに失敗しました");
                 }
             }
             else
             {
                 Debug.LogError("エラー: " + request.error);
                 Debug.LogError("レスポンス: " + request.downloadHandler.text);
+                AppendMessage("システム", "エラー: APIリクエストに失敗しました");
             }
         }
+
+        // 送信ボタンを再度有効化
+        sendButton.interactable = true;
     }
-}
-
-// Groq APIレスポンス用クラス
-[System.Serializable]
-public class GroqResponse
-{
-    public string id;
-    public string @object;
-    public long created;
-    public string model;
-    public Choice[] choices;
-    public Usage usage;
-}
-
-[System.Serializable]
-public class Choice
-{
-    public int index;
-    public Message message;
-    public string finish_reason;
-}
-
-[System.Serializable]
-public class Message
-{
-    public string role;
-    public string content;
-}
-
-[System.Serializable]
-public class Usage
-{
-    public int prompt_tokens;
-    public int completion_tokens;
-    public int total_tokens;
 }
