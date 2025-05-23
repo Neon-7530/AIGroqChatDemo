@@ -67,6 +67,24 @@ style: |
     padding: 0.1em 0.7em;
     margin-bottom: 0.5em;
   }
+  .important {
+    background-color: #fff3cd;
+    padding: 1em;
+    border-radius: 5px;
+    margin: 1em 0;
+  }
+  .warning {
+    background-color: #f8d7da;
+    padding: 1em;
+    border-radius: 5px;
+    margin: 1em 0;
+  }
+  .tip {
+    background-color: #d1ecf1;
+    padding: 1em;
+    border-radius: 5px;
+    margin: 1em 0;
+  }
 ---
 <span class="section-num">01</span>
 <span class="section-title">はじめに</span>
@@ -81,20 +99,62 @@ style: |
 AIと会話できる道具屋さんを作ります。
 </div>
 
+<div class="important">
+このプロジェクトでは、以下の技術を使用します：
+- Unity：ゲームエンジン
+- C#：プログラミング言語
+- Groq API：AIとの会話
+- JSON：データのやり取り
+</div>
+
+<div class="tip">
+プログラミング初心者の方でも安心！
+各ステップで必要なコードを提供し、
+詳しい説明を付けています。
+</div>
+
 ---
 
 # 実装の流れ 📝
 
 1. 基本的な会話システム
+   - UIの作成
+   - メッセージの送受信
+   - 画面表示の実装
+
 2. 会話履歴の管理
+   - メッセージの保存
+   - 文脈の維持
+   - データ構造の設計
+
 3. API通信の実装
+   - APIキーの設定
+   - リクエストの作成
+   - レスポンスの受信
+
 4. レスポンス処理
+   - JSONの解析
+   - エラー処理
+   - データの検証
+
 5. 商品購入機能
+   - 商品リストの管理
+   - 購入処理の実装
+   - 購入履歴の表示
+
 6. システムメッセージ
+   - AIの設定
+   - 会話の制御
+   - エラーハンドリング
 
 <div class="note">
 ※ 各ステップのコードを順番にコピペしていくことで、
 完成したシステムが作れます。
+</div>
+
+<div class="warning">
+注意：APIキーは安全に管理してください。
+コードに直接書かず、環境変数などで管理することをお勧めします。
 </div>
 
 ---
@@ -131,6 +191,18 @@ public class GroqChatClient : MonoBehaviour
 コピペしてください。
 </div>
 
+<div class="important">
+このコードでは以下の要素を定義しています：
+- UIコンポーネントの参照
+- 初期化処理
+- イベントリスナーの設定
+</div>
+
+<div class="tip">
+[SerializeField]属性を使用することで、
+Unity Editor上でコンポーネントを設定できます。
+</div>
+
 ---
 
 # イベントリスナーの設定 🎮
@@ -162,6 +234,19 @@ private void AppendMessage(string sender, string message)
 ボタンクリックとEnterキーでメッセージを送信できます。
 </div>
 
+<div class="important">
+このコードでは以下の機能を実装しています：
+- ボタンクリックの検知
+- Enterキーの検知
+- メッセージの送信処理
+- 画面への表示
+</div>
+
+<div class="warning">
+注意：メッセージが空の場合は送信しないように
+チェックしています。
+</div>
+
 ---
 <span class="section-num">03</span>
 <span class="section-title">会話履歴の管理</span>
@@ -182,6 +267,17 @@ public class ChatMessage
 <div class="note">
 ※ このクラスをGroqChatClient.csの先頭に追加してください。
 会話の内容を保存するためのデータ構造です。
+</div>
+
+<div class="important">
+ChatMessageクラスは以下の情報を保持します：
+- role: メッセージの送信者（"user"または"assistant"）
+- content: メッセージの内容
+</div>
+
+<div class="tip">
+[System.Serializable]属性により、
+このクラスはJSONに変換可能になります。
 </div>
 
 ---
@@ -210,6 +306,20 @@ private void OnSendButtonClicked()
 置き換えてください。
 </div>
 
+<div class="important">
+このコードでは以下の機能を実装しています：
+- 会話履歴の保存
+- メッセージの追加
+- 画面表示の更新
+</div>
+
+<div class="warning">
+注意：会話履歴はListで管理され、
+メモリに保持されます。
+大量の会話を保存する場合は、
+適切なクリーンアップが必要です。
+</div>
+
 ---
 <span class="section-num">04</span>
 <span class="section-title">API通信の実装</span>
@@ -232,6 +342,19 @@ public class ChatRequest
 <div class="note">
 ※ このクラスをGroqChatClient.csに追加してください。
 AIへのリクエストの形式を定義します。
+</div>
+
+<div class="important">
+ChatRequestクラスは以下の設定を含みます：
+- messages: 会話履歴の配列
+- model: 使用するAIモデル
+- temperature: 応答のランダム性（0-1）
+- max_completion_tokens: 最大応答文字数
+</div>
+
+<div class="tip">
+temperatureを調整することで、
+AIの応答の創造性を制御できます。
 </div>
 
 ---
@@ -263,34 +386,17 @@ private IEnumerator CallGroqAPI()
 APIキーは後で設定します。
 </div>
 
----
+<div class="important">
+このコードでは以下の機能を実装しています：
+- APIリクエストの送信
+- レスポンスの受信
+- エラーハンドリング
+</div>
 
-# リクエスト作成メソッド 🔧
-
-```csharp
-private UnityWebRequest CreateAPIRequest()
-{
-    string url = "https://api.groq.com/openai/v1/chat/completions";
-    var data = new ChatRequest
-    {
-        messages = chatHistory.ToArray()
-    };
-
-    string json = JsonUtility.ToJson(data);
-    var request = new UnityWebRequest(url, "POST");
-    byte[] bodyRaw = System.Text.Encoding.UTF8.GetBytes(json);
-    request.uploadHandler = new UploadHandlerRaw(bodyRaw);
-    request.downloadHandler = new DownloadHandlerBuffer();
-    request.SetRequestHeader("Content-Type", "application/json");
-    request.SetRequestHeader("Authorization", "Bearer " + apiKey);
-
-    return request;
-}
-```
-
-<div class="note">
-※ このコードをGroqChatClient.csに追加してください。
-APIリクエストを作成するメソッドです。
+<div class="warning">
+注意：APIキーは安全に管理してください。
+環境変数やScriptableObjectを使用することを
+お勧めします。
 </div>
 
 ---
@@ -313,6 +419,17 @@ public class CustomGroqResponse
 <div class="note">
 ※ このクラスをGroqChatClient.csに追加してください。
 AIからの返事の形式を定義します。
+</div>
+
+<div class="important">
+CustomGroqResponseクラスは以下の情報を保持します：
+- message: AIからの会話内容
+- buy_item: 購入した商品名（購入がない場合は空文字）
+</div>
+
+<div class="tip">
+このクラスはJSONレスポンスの形式に合わせて
+設計されています。
 </div>
 
 ---
@@ -344,6 +461,19 @@ private void ProcessAPIResponse(string responseText)
 <div class="note">
 ※ このコードをGroqChatClient.csに追加してください。
 AIからの返事を処理するメソッドです。
+</div>
+
+<div class="important">
+このコードでは以下の機能を実装しています：
+- JSONレスポンスの解析
+- 会話履歴への追加
+- 画面表示の更新
+- エラーハンドリング
+</div>
+
+<div class="warning">
+注意：JSONの解析に失敗した場合は、
+エラーメッセージをログに出力します。
 </div>
 
 ---
@@ -396,6 +526,25 @@ private void ProcessAPIResponse(string responseText)
 商品の購入機能が追加されます。
 </div>
 
+<div class="important">
+このコードでは以下の機能を実装しています：
+- 購入商品の管理
+- 購入履歴の表示
+- メッセージの整形
+- エラーハンドリング
+</div>
+
+<div class="tip">
+購入した商品はListで管理され、
+画面に表示されます。
+</div>
+
+<div class="warning">
+注意：購入履歴はメモリに保持されます。
+ゲームの終了時にクリアするか、
+永続化するかを検討してください。
+</div>
+
 ---
 <span class="section-num">07</span>
 <span class="section-title">システムメッセージ</span>
@@ -429,6 +578,24 @@ private void Start()
 ※ このコードをGroqChatClient.csに追加し、
 Startメソッドを更新してください。
 AIの設定が初期化されます。
+</div>
+
+<div class="important">
+このコードでは以下の設定を行っています：
+- AIの性格設定
+- 商品情報の設定
+- 会話ルールの設定
+- 応答形式の指定
+</div>
+
+<div class="tip">
+システムメッセージは会話の最初に送信され、
+AIの振る舞いを制御します。
+</div>
+
+<div class="warning">
+注意：システムメッセージは慎重に設計してください。
+AIの応答に大きな影響を与えます。
 </div>
 
 ---
