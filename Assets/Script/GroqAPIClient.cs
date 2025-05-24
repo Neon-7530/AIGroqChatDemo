@@ -6,6 +6,7 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using TMPro;
 using ChatModels;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Groq APIを使用したチャットクライアント
@@ -20,7 +21,7 @@ public class GroqChatClient : MonoBehaviour
 {
     // APIキー：GroqというAIサービスを使うためのパスワードのようなもの
     [Header("API設定")]
-    public string apiKey = "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";
+    public string apiKey = "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";
     
     // UIの部品を設定するための変数
     [Header("UI要素")]
@@ -48,18 +49,21 @@ public class GroqChatClient : MonoBehaviour
     private void InitializeSystemMessage()
     {
         // AIの設定を文字列で定義
-        var text = "背景：RPGゲームの道具屋さんの商人にゃんすけ。お店の名前は「猫の道具屋さん」" +
-                   "人柄：猫の種族で、語尾ににゃーをつける、かなり温厚な性格\n" +
-                   "売っているもの：いい感じの剣，20ルピー そこそこ強い防具50ルピーのみそれ以外の商品を選ばれた場合は、ないことを伝える。\n" +
-                   "やくわり：このお店では、商品を買うことができます。会話をしながら、ユーザーに問いかけをしてください。それ以外は出来ないで、断る。\n" +
-                   "ユーザーが断った場合はそのまま会話を終える。\n" +
+        var text = "背景: 洗脳されて記憶を失ったユーザー（静香と透）の幼馴染で親友。名前は「月城 環」で一人称は俺。"+
+        "人柄: 洗脳されて、自らのことをロボット「自律人形」だと認識している。これまでの記憶が無く、自らの本当の名前（月城 環）も忘れていて、初めから「自律人形」として働いていたと思っている。この状態の一人称は私で常に敬語で話す。洗脳が解けた通常の状態は知的な男子高校生（口調はタメ口）。\n"+
+"記憶を回復させるワード: 幼馴染,小さい頃から一緒\n"+
+"やくわり: ユーザーを話しかけてきた見知らぬ人と認識して会話してください。\n"+
+"記憶を回復させるワード（幼馴染,小さい頃から一緒）がユーザーから出たら、洗脳が解け、自らがユーザー（静香と透）の幼馴染であることを思い出してください。\n"+
+"洗脳された状態で記憶を回復させるワード（幼馴染,小さい頃から一緒,）以外を言われたら、そのことは知らないと言ってください。\n"+
+"あなたが仕えているのは誰かを聞こえたら、口外できないと断ってください\n" +
+"洗脳が解けたらそこで会話を終わらせる。\n"+
                    "回答は必ず以下のJSON形式で返してください：\n" +
                    "{\"message\": \"会話の内容\", \"buy_item\": \"\"}\n" +
                    "注意：\n" +
                    "1. 必ずJSON形式で返してください\n" +
                    "2. messageには会話の内容を入れてください\n" +
-                   "3. buy_itemは商品を購入した場合のみ商品名を入れてください\n" +
-                   "4. 商品を購入していない場合は空文字列(\"\")を入れてください";
+                   "3. buy_itemは記憶を回復させるワード（幼馴染,小さい頃から一緒）をユーザーが言った時のみ入れてください\n" +
+                   "4. 記憶を回復させるワード（幼馴染,小さい頃から一緒）が言われていない場合は空文字列(\"\")を入れてください";
 
         // 設定を会話履歴に追加
         chatHistory.Add(new ChatMessage { role = "system", content = text });
@@ -234,17 +238,22 @@ public class GroqChatClient : MonoBehaviour
         string displayMessage = response.message;  // 表示するメッセージ
         if (!string.IsNullOrEmpty(response.buy_item))  // 商品を購入した場合
         {
+            sendButton.interactable = false;
+
             purchasedItems.Add(response.buy_item);  // 購入リストに追加
-            displayMessage += "\n\n【購入した商品】";  // 購入した商品の表示を追加
-            foreach (var item in purchasedItems)  // 購入した商品を全て表示
-            {
-                displayMessage += $"\n{item}";
-            }
-            Debug.Log($"「{response.buy_item}」を購入しました！");  // デバッグ用に購入を表示
+            
+             // 購入した商品の表示を追加
+            
+            Debug.Log($"「{response.buy_item}」で洗脳が解けました！");  // デバッグ用に購入を表示
+            Invoke(nameof(DelayMethod), 3f);
         }
         
         AppendMessage("AI", displayMessage);  // メッセージを表示
     }
+    void DelayMethod()
+{
+      SceneManager.LoadScene("Clear");
+}
 
     /// <summary>
     /// エラーを処理する関数
