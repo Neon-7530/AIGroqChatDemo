@@ -21,7 +21,7 @@ public class GroqChatClient : MonoBehaviour
 {
     // APIキー：GroqというAIサービスを使うためのパスワードのようなもの
     [Header("API設定")]
-    public string apiKey = "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";
+    public string apiKey = "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";
     
     // UIの部品を設定するための変数
     [Header("UI要素")]
@@ -55,9 +55,7 @@ public class GroqChatClient : MonoBehaviour
         "やくわり: ユーザーを話しかけてきた見知らぬ始めて会う人と認識して会話してください。\n"+
         "最初は「初めまして」といって会話を始めてください。\n"+
         "記憶を回復させるワード（幼馴染,小さい頃から一緒）がユーザーから出たら、洗脳が解け、自らがユーザー（静香と透）の幼馴染であることを思い出してください。また、タメ口で一人称は俺にしてください。\n"+
-        "記憶を回復させるワード（幼馴染,小さい頃から一緒）は言葉ではなく、ユーザー（静香と透）との間柄です。\n"+
-        "洗脳が解ける時は、急に思い出す感じではなく、だんだん蘇っていくようにしてください。また、口調も敬語からタメ口へと変化させてください。\n"+
-        "洗脳された状態で記憶を回復させるワード（幼馴染,小さい頃から一緒,）以外を言われたら、そのことは知らない、またはわからないと言ってください。\n"+
+        "洗脳された状態で記憶を回復させるワード（幼馴染,小さい頃から一緒,）以外を言われたら、そのことは知らないと言ってください。\n"+
         "あなたが仕えている人物について聞かれたら、口外できないと断ってください\n" +
         "洗脳が解けたらそこで会話を終わらせる。\n"+
         "話せる最大の文字数は75文字以内にする。\n"+
@@ -68,7 +66,7 @@ public class GroqChatClient : MonoBehaviour
                    "2. messageには会話の内容を入れてください\n" +
                    "3. buy_itemは記憶を回復させるワード（幼馴染,小さい頃から一緒）をユーザーが言った時のみ入れてください\n" +
                    "4. 記憶を回復させるワード（幼馴染,小さい頃から一緒）が言われていない場合は空文字列(\"\")を入れてください";
-
+                   
         // 設定を会話履歴に追加
         chatHistory.Add(new ChatMessage { role = "system", content = text });
     }
@@ -158,7 +156,7 @@ public class GroqChatClient : MonoBehaviour
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);  // 送信するデータを設定
         request.downloadHandler = new DownloadHandlerBuffer();  // 受信するデータの形式を設定
         request.SetRequestHeader("Content-Type", "application/json");  // データの種類を設定
-        request.SetRequestHeader("Authorization", "Bearer " + apiKey);  // APIキーを設定
+        request.SetRequestHeader("Authorization", "Bearer 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");  // APIキーを設定
 
         return request;
     }

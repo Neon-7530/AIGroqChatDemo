@@ -6,9 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/AAAA.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
     path: Assets/Scenes/Clear.unity
     guid: c2662b1b7b3d945f0843e635901dbee2
+  - enabled: 1
+    path: Assets/Scenes/City.unity
+    guid: a6cac987a631147c68d20bec24b080d4
+  - enabled: 1
+    path: Assets/Scenes/Flower.unity
+    guid: 99991527b52c34a0fb1f2276b6f544d3
+  - enabled: 1
+    path: Assets/Scenes/Tamaki.unity
+    guid: a3dc82d0d976344da9d66745b9ad5621
+  - enabled: 1
+    path: Assets/Scenes/Lab.unity
+    guid: f58e7f44201ed47bdb9a3d15a61fff89
   m_configObjects: {}

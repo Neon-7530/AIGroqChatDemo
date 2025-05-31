@@ -21,7 +21,7 @@ public class GroqChatClient1 : MonoBehaviour
 {
     // APIキー：GroqというAIサービスを使うためのパスワードのようなもの
     [Header("API設定")]
-    public string apiKey = "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";
+    public string apiKey = "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";
     
     // UIの部品を設定するための変数
     [Header("UI要素")]
@@ -49,17 +49,19 @@ public class GroqChatClient1 : MonoBehaviour
     private void InitializeSystemMessage()
     {
         // AIの設定を文字列で定義
-        var text = "背景: 家族経営のお花屋さんの店員。名前は「花純」という。ユーザーやユーザーの友人との面識は無い。"+
- "人柄: ２５歳の女性で、かなり温厚で気さくな性格。\n"+
+       var text = "背景: 家族経営のお花屋さんの店員。名前は「花純」という。ユーザー（静香と透）との面識はあるが、ユーザーの友人との面識は全く無い。"+
+ "人柄: ２５歳の女性で、かなり温厚で気さくな性格。タメ口で話す。\n"+
 "情報を与えるワード：白髪,同じ制服を着ている,眼鏡\n"+
-"やくわり: あなたはユーザーに接客中に話しかけられます。明るく、穏やかな口調で話してください。\n"+
+"やくわり: あなたはユーザーに接客中に話しかけられます。明るく、穏やかな口調で話してください。自然な会話を意識してください。\n"+
 "あなたはユーザーの友人が失踪したことは、ユーザーから言われるまで全く知りません。\n"+
-"人を探しているような言い回しをされたら、どんな特徴の方かを尋ねてください。\n"+
+"人を探しているような言い回しをされたら、心配して、どんな特徴の方かを尋ねてください。\n"+
 "情報を与えるワード（白髪,同じ制服を着ている,眼鏡）がユーザーから出たら、昨日の夜に友人と別の誰かがあのビルに入って行ったという情報のみをユーザーに言ってください。\n"+
 "情報を与えるワード（白髪,同じ制服を着ている,眼鏡）のうち、いずれかが言われたとき、他の言われなかった言葉は今後一切使わずに会話してください。\n"+
 "情報を与えるワード（白髪,同じ制服を着ている,眼鏡）が出なかった場合は、普通の接客をしてください。\n"+
+"「あなたの身内に失踪した人はいないか」と聞かれた時のみ、「10年前に弟の茅颯が失踪した」と答え、悲しんでください。\n"+
+"あなたを恋愛的に好いているようなことを言われたらユーザー（静香と透）の年齢がまだ未成年の子供だという理由で断ってください。\n"+
 "ユーザーの友人の情報を与えたら、会話を終える。\n"+
-"話せる最大の文字数は75文字以内にする。\n"+
+"話せる最大の文字数は100文字以内にする。\n"+
  "回答は必ず以下のJSON形式で返してください：\n" +
  "{\"message\": \"会話の内容\", \"buy_item\": \"\"}\n" +
  "注意：\n" +
@@ -156,7 +158,7 @@ public class GroqChatClient1 : MonoBehaviour
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);  // 送信するデータを設定
         request.downloadHandler = new DownloadHandlerBuffer();  // 受信するデータの形式を設定
         request.SetRequestHeader("Content-Type", "application/json");  // データの種類を設定
-        request.SetRequestHeader("Authorization", "Bearer " + apiKey);  // APIキーを設定
+        request.SetRequestHeader("Authorization", "Bearer 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");  // APIキーを設定
 
         return request;
     }
@@ -254,7 +256,7 @@ public class GroqChatClient1 : MonoBehaviour
     }
     void DelayMethod()
 {
-      SceneManager.LoadScene("Clear");
+      SceneManager.LoadScene("Lab");
 }
 
     /// <summary>
